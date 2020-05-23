@@ -38,7 +38,7 @@ namespace RandomHSM
         {
             Rn = Dim; 
             rn = Rn - 2;
-	        En = Num;
+	    En = Num;
  
             Rb = Rbound;
             Vb = Vgamma(Rn);  for (int k = 0; k < Rn; k++) Vb *= Rb;
@@ -47,9 +47,9 @@ namespace RandomHSM
             Te = Tc = dT = 0D;
 	        
             Pc = 0.000;
-	        Pp = 0.000;
-	        Pe = 0.000;
-	        Pg = 0.000;
+	    Pp = 0.000;
+	    Pe = 0.000;
+	    Pg = 0.000;
             Ef = 0D; Cb = 0; Ce = 0;
 
             Rd = new Random();

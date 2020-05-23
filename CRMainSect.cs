@@ -6,9 +6,9 @@ namespace RandomHSM
     public partial class CRandom
     {
         //--------------------------------------------------------------------
-	    public int		        Rn;//Space dimension
+	public int		Rn;//Space dimension
         public int              rn;//output dimension
-        public int		        En;//Number of elements
+        public int		En;//Number of elements
         public double           Ee;//Space range (-Ee;+Ee) treated as 0
         public double           Rb;//Bound radius
         public double           Ri;//Element radius

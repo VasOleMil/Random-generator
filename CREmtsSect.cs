@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CRandom
+namespace RandomHSM
 {
     public partial class CRandom
     {
@@ -20,7 +20,6 @@ namespace CRandom
             {
                 e.Source = "EmtsIni";
                 Ev = null;
-                Re.Stt = 1;
                 return;
             }
             //Allocate resources
@@ -28,7 +27,6 @@ namespace CRandom
             {
                 //throw exeption
                 Ev = null;
-                Re.Stt = 1;
                 return;
             }
             //init elements
@@ -53,7 +51,6 @@ namespace CRandom
                     Ev[i].V[k] = V * 2D * (Rd.NextDouble() - 0.5D);
                 }
             }
-            Re.Stt = 0;
         }
         //--------------------------------------------------------------------
         private void EmtsIniGtb(int Ei)

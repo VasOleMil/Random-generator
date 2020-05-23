@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 
-namespace CRandom
+namespace RandomHSM
 {
     
     class Program
@@ -10,7 +9,6 @@ namespace CRandom
         //--------------Compression parameters--------------------------------
         static int          Dim = 4;                //Dim - dimension , 
         static int          Num = 100;              //Num number of elements
-        static int          Stp = 1000000;          //Stp - averaging period,
         //--------------------------------------------------------------------
         static CRandom      Rd = null;
         static FileStream   fs = null;
@@ -77,14 +75,27 @@ namespace CRandom
             //Rd = new CRandom(4, 100, 8.00, 1.0, 10.0);
             //Rd = new CRandom(5, 100, 5.70, 1.0, 10.0);
             //Rd = new CRandom(6, 100, 4.65, 1.0, 10.0);
-            Rd = new CRandom(Dim, 100, 8.0, 1.0, 10.0);
+            //Rd = new CRandom(7, 100, 4.07, 1.0, 10.0);
+            //Rd = new CRandom(8, 100, 3.68, 1.0, 10.0);
+
+            switch (Dim)
+            {
+                case 3: Rd = new CRandom(3, 100, 15.8, 1.0, 10.0); break;
+                case 4: Rd = new CRandom(4, 100, 8.00, 1.0, 10.0); break;
+                case 5: Rd = new CRandom(5, 100, 5.70, 1.0, 10.0); break;
+                case 6: Rd = new CRandom(6, 100, 4.65, 1.0, 10.0); break;
+                case 7: Rd = new CRandom(7, 100, 4.07, 1.0, 10.0); break;
+                case 8: Rd = new CRandom(8, 100, 3.68, 1.0, 10.0); break;
+            }
+
             for (int i = 0; i < Num; i++)
             {
                 Rd.Next();
 
-                String rs = "{"+ Rd.Rs.X[0].ToString("G8").Replace(",","."); 
-                for (int k = 1; k < Dim; k++) rs += ",\t" + Rd.Rs.X[k].ToString("G8").Replace(",", "."); rs += "},";
-                Console.WriteLine("{0}\t{1}\t{2}", Rd.Rs.Ei, Rd.Rs.Ej,rs);
+                String rs = "{"+ Rd.Rs.V[0].ToString("G8").Replace(",","."); 
+                for (int k = 1; k < Dim; k++) rs += ",\t" + Rd.Rs.V[k].ToString("G8").Replace(",", "."); rs += "},";
+                Console.WriteLine("{0}", rs);
+                //Console.WriteLine("{0}\t{1}\t{2}", Rd.Rs.Ei, Rd.Rs.Ej, rs);
             }
 
             //Finally,

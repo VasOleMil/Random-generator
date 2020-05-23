@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CRandom
+namespace RandomHSM
 {
     public partial class CRandom
     {
@@ -32,10 +32,8 @@ namespace CRandom
         Random                  Rd; //Random generator
         int                     Cb; //Number of e-e interactions 
         int                     Ce; //Number of b-e interactions
-        CPassItem<int>          Re; //Internal return reporter
-
- 
-       //--------------------------------------------------------------------
+  
+        //--------------------------------------------------------------------
         public CRandom(int Dim, int Num, double Rbound, double Relement, double Rdif)
         {
             Rn = Dim; 
@@ -55,7 +53,6 @@ namespace CRandom
             Ef = 0D; Cb = 0; Ce = 0;
 
             Rd = new Random();
-            Re = new CPassItem<int>();
             Rs = new CEvent(); Rs.Dim(Rn);
             
             EmtsIni();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CRandom
+namespace RandomHSM
 {
     public partial class CRandom
 	{

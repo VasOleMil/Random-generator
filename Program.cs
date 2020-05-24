@@ -79,7 +79,8 @@ namespace RandomHSM
             //Rd = new CRandom(8, 100, 3.68, 1.0, 10.0);
             
             //Rd = new CRandom(3, 300, 28.5, 1.0, 10.0);
-
+            //Rd = new CRandom(4, 300, 11.8, 1.0, 10.0);
+            
             switch (Dim)
             {
                 case 3: Rd = new CRandom(3, 100, 15.8, 1.0, 10.0); break;

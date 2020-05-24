@@ -113,7 +113,7 @@ namespace RandomHSM
 		//--------------------------------------------------------------------
 		private void TimeDecStp()
         	{
-	        for (int i = 0; i < En; i++)
+	        	for (int i = 0; i < En; i++)
 			{
 				CElement ei = Ev[i]; 
 				

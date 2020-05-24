@@ -112,7 +112,7 @@ namespace RandomHSM
 		}//Select minimal tti Tm from Ev
 		//--------------------------------------------------------------------
 		private void TimeDecStp()
-        {
+        	{
 	        for (int i = 0; i < En; i++)
 			{
 				CElement ei = Ev[i]; 
@@ -120,7 +120,7 @@ namespace RandomHSM
 				ei.T -= dT;
 				ei.t -= dT;
 			}
-        }//Decreases times
+        	}//Decreases times
 		//--------------------------------------------------------------------
 		private void TimeIniSts()
 		{

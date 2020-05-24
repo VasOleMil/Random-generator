@@ -6,9 +6,9 @@ namespace RandomHSM
     
     class Program
     {
-        //--------------Compression parameters--------------------------------
-        static int          Dim = 4;                //Dim - dimension , 
-        static int          Num = 100;              //Num number of elements
+        //------------------------- parameters--------------------------------
+        static int          Dim = 4;                //Dim - dimension  
+        static int          Num = 100;              //numbers to produce
         //--------------------------------------------------------------------
         static CRandom      Rd = null;
         static FileStream   fs = null;

@@ -77,6 +77,8 @@ namespace RandomHSM
             //Rd = new CRandom(6, 100, 4.65, 1.0, 10.0);
             //Rd = new CRandom(7, 100, 4.07, 1.0, 10.0);
             //Rd = new CRandom(8, 100, 3.68, 1.0, 10.0);
+            
+            //Rd = new CRandom(3, 300, 28.5, 1.0, 10.0);
 
             switch (Dim)
             {
@@ -95,7 +97,6 @@ namespace RandomHSM
                 String rs = "{"+ Rd.Rs.V[0].ToString("G8").Replace(",","."); 
                 for (int k = 1; k < Dim; k++) rs += ",\t" + Rd.Rs.V[k].ToString("G8").Replace(",", "."); rs += "},";
                 Console.WriteLine("{0}", rs);
-                //Console.WriteLine("{0}\t{1}\t{2}", Rd.Rs.Ei, Rd.Rs.Ej, rs);
             }
 
             //Finally,

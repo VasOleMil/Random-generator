@@ -35,7 +35,7 @@ namespace RandomHSM
                 //Set arguments
                 Ei = i; 
                 //Set Radius of element
-                Ev[i].R = Ri + 0.01 * dR * 2D * (Rd.NextDouble() - 0.5D);
+                Ev[i].R = Ri * (1D + 0.01 * dR * 2D * (Rd.NextDouble() - 0.5D));
                 //Set mass
                 Ev[i].M = Vgamma(Rn);
                 for (int k = 0; k < Rn; k++)

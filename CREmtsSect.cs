@@ -165,7 +165,7 @@ namespace RandomHSM
                 xx += x * x;
             }
 
-           if (xx == 0D)
+            if (xx == 0D)
             {
                 for (k = 0; k < Rn; k++)
                 {

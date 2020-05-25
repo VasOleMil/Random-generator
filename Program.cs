@@ -7,7 +7,7 @@ namespace RandomHSM
     class Program
     {
         //-------------------------Default  parameters------------------------
-        static int          Dim = 4;                //Dim - dimension  
+        static int          Dim = 3;                //Dim - dimension  
         static int          Num = 100;              //numbers to produce
         //--------------------------------------------------------------------
         static CRandom      Rd = null;

@@ -172,7 +172,7 @@ namespace RandomHSM
                     Rs.X[k] = 0D;
                     Rs.V[k] = 0D;
                 }
-                k = Ei % Rn;
+                k = Rs.Ei % Rn;
                 Rs.X[k] = Rb;
                 Rs.V[k] = 1D;
             }
@@ -206,7 +206,7 @@ namespace RandomHSM
                     Rs.X[k] = 0D;
                     Rs.V[k] = 0D;
                 }
-                k = Ei % Rn;
+                k = Rs.Ei % Rn;
                 Rs.X[k] = Rb;
                 Rs.V[k] = 1D;
             }

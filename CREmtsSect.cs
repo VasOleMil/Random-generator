@@ -165,10 +165,24 @@ namespace RandomHSM
                 xx += x * x;
             }
 
-            x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
+           if (xx == 0D)
             {
-                Rs.X[k] *= Rb * x;
-                Rs.V[k] *= x;
+                for (k = 0; k < Rn; k++)
+                {
+                    Rs.X[k] = 0D;
+                    Rs.V[k] = 0D;
+                }
+                k = Ei % Rn;
+                Rs.X[k] = Rb;
+                Rs.V[k] = 1D;
+            }
+            else
+            {
+                x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
+                {
+                    Rs.X[k] *= Rb * x;
+                    Rs.V[k] *= x;
+                }
             }
         }
         //--------------------------------------------------------------------
@@ -185,10 +199,24 @@ namespace RandomHSM
                 xx += x * x;
             }
 
-            x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
+            if (xx == 0D)
             {
-                Rs.X[k] *= Rb * x;
-                Rs.V[k] *= x;
+                for (k = 0; k < Rn; k++)
+                {
+                    Rs.X[k] = 0D;
+                    Rs.V[k] = 0D;
+                }
+                k = Ei % Rn;
+                Rs.X[k] = Rb;
+                Rs.V[k] = 1D;
+            }
+            else
+            {
+                x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
+                {
+                    Rs.X[k] *= Rb * x;
+                    Rs.V[k] *= x;
+                }
             }
         }
         //--------------------------------------------------------------------

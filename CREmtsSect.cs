@@ -93,9 +93,11 @@ namespace RandomHSM
         {
             for (int i = 0; i < En; i++)
             {
+                CElement ei = Ev[i];
+
                 for (int k = 0; k < Rn; k++)
                 {
-                        Ev[i].X[k] += Ev[i].V[k] * dT;
+                        ei.X[k] += ei.V[k] * dT;
                 }
             }
         }//Moves all elements

@@ -5,8 +5,8 @@ namespace RandomHSM
     public partial class CRandom
     {
         //--------------------------------------------------------------------
-	    public int		        Rn;//Space dimension
-        public int		        En;//Number of elements
+	public int		Rn;//Space dimension
+        public int		En;//Number of elements
         public double           Rb;//Bound radius
         public double           Re;//Element radius
         public double           dR;//Element difference %
@@ -102,6 +102,6 @@ namespace RandomHSM
 		        return Pk * d / k;
 	        }
         }
-		//--------------------------------------------------------------------
-	}
+	//--------------------------------------------------------------------
+    }
 }

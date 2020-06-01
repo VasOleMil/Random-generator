@@ -59,12 +59,12 @@ namespace RandomHSM
 		}//Select minimal tti Tm from Ev
 		//--------------------------------------------------------------------
 		private void TimeDecStp()
-        {
-	        for (int i = 0; i < En; i++)
+        	{
+	        	for (int i = 0; i < En; i++)
 			{
 				Ev[i].T -= dT;
 			}
-        }//Decreases times
+        	}//Decreases times
 		//--------------------------------------------------------------------
 	}
 }

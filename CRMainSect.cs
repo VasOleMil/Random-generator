@@ -1,56 +1,30 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 
 namespace RandomHSM
 {
     public partial class CRandom
     {
         //--------------------------------------------------------------------
-	public int		Rn;//Space dimension
-        public int              rn;//output dimension
-        public int		En;//Number of elements
-        public double           Ee;//Space range (-Ee;+Ee) treated as 0
+	    public int		        Rn;//Space dimension
+        public int		        En;//Number of elements
         public double           Rb;//Bound radius
-        public double           Ri;//Element radius
+        public double           Re;//Element radius
         public double           dR;//Element difference %
         public double           Vb;//Bound volume
         public double           dT;//Current time step
-        public double           Te;//Eventual time
-        public double           Tc;//Continious time
-
-        public double           Ef;//Ce/(Cb+Ce)*100%
-        public double           Pe;//Summary energy
-        public double           Pm;//Summary mass
-        public double           Pp;//Abs impulse
-        public double           Pc;//Abs center of mass
-        public double           Pg;//Average geometry deviation
-        public double           Pt;//Uniform
-        public double           Pv;//Volume
-
-        public CEvent           Rs; 
+        public CEvent           Rs;//Return sequence
 
         Random                  Rd; //Random generator
-        int                     Cb; //Number of e-e interactions 
-        int                     Ce; //Number of b-e interactions
-  
         //--------------------------------------------------------------------
         public CRandom(int Dim, int Num, double Rbound, double Relement, double Rdif)
         {
             Rn = Dim; 
-            rn = Rn - 2;
-	    En = Num;
+	        En = Num;
  
             Rb = Rbound;
             Vb = Vgamma(Rn);  for (int k = 0; k < Rn; k++) Vb *= Rb;
-            Ri = Relement;
+            Re = Relement;
             dR = Rdif;
-            Te = Tc = dT = 0D;
-	        
-            Pc = 0.000;
-	    Pp = 0.000;
-	    Pe = 0.000;
-	    Pg = 0.000;
-            Ef = 0D; Cb = 0; Ce = 0;
 
             Rd = new Random();
             Rs = new CEvent(); Rs.Dim(Rn);
@@ -59,29 +33,48 @@ namespace RandomHSM
             TimeIni();
         }//Object construction
         //--------------------------------------------------------------------
-        public void RunOne()
+        public CRandom(int Dim, int Num)
+        {
+            Rn = Dim;
+            En = Num;
+          
+            Re = 1.00D;
+            dR = 10.0D;
+
+            Rb = Re * Math.Pow((double)Num * 100D, 1D / Rn);
+            Vb = Vgamma(Rn); for (int k = 0; k < Rn; k++) Vb *= Rb;
+
+            Rd = new Random();
+            Rs = new CEvent(); Rs.Dim(Rn);
+
+            EmtsIni();
+            TimeIni();
+        }//Object construction
+        //--------------------------------------------------------------------
+        public void Next()
         {
             //Select minimal tti  from Ev
             TimeGetStp(); 
             //Change geometry
             EmtsMovAll();
-            //Collide selected elements
-            EmtsColSel();
             //Change tti
             TimeDecStp();
-            //Calculate new tti, return selected elements
-            TimeIniSts();
-        }
-        //--------------------------------------------------------------------
-        public void Next()
-        {
-            double x, xx;
-            do
-            {
-                RunOne();
-                xx = 0; for (int k = 0; k < rn; k++) xx += (x = Rs.V[k]) * x;
-            }
-            while (xx > 1D);
+            //Interact with bound
+            EmtsCollBE();
+            //calculate new tti
+            TimeCalcBE(Rs.E);
+            
+            //register event
+            EmtsRegEvt();
+
+            //Select two elements
+            int Ei = Rs.E < En - 1 ? Rs.E + 1 : 0;
+            int Ej = 0 < Rs.E ? Rs.E - 1 : En - 1;
+            //Interact selected elements
+            EmtsColSel(Ei, Ej);
+            //Calculate selected tti
+            TimeCalcBE(Ei);
+            TimeCalcBE(Ej);
         }
         //--------------------------------------------------------------------
         private double Vgamma(int Dim)
@@ -109,6 +102,6 @@ namespace RandomHSM
 		        return Pk * d / k;
 	        }
         }
-	//--------------------------------------------------------------------
-    }
+		//--------------------------------------------------------------------
+	}
 }

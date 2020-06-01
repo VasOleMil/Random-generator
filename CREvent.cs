@@ -8,8 +8,7 @@ namespace RandomHSM
         public      double []   X;//Coordinares
         public      double []   V;//Speeds
 
-        public      int         Ei;//Element to interact
-	public      int         Ej;//Element to interact
+        public      int         E;//Element to interact
         //--------------------------------------------------------------------
         public CEvent()
         {

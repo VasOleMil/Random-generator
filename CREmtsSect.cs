@@ -6,8 +6,6 @@ namespace RandomHSM
     {
         //--------------------------------------------------------------------
         CElement[]  Ev;//Elements container
-        int         Ei;//Impicit argument, Pointer for exchange
-        int         Ej;//Impicit argument, Pointer for exchange
         //--------------------------------------------------------------------
         private void EmtsIni()
         {
@@ -32,10 +30,8 @@ namespace RandomHSM
             //init elements
             for (int i = 0; i < En; i++) 
             {
-                //Set arguments
-                Ei = i; 
                 //Set Radius of element
-                Ev[i].R = Ri * (1D + 0.01 * dR * 2D * (Rd.NextDouble() - 0.5D));
+                Ev[i].R = Re * (1D + 0.01 * dR * 2D * (Rd.NextDouble() - 0.5D));
                 //Set mass
                 Ev[i].M = Vgamma(Rn);
                 for (int k = 0; k < Rn; k++)
@@ -43,7 +39,7 @@ namespace RandomHSM
                     Ev[i].M *= Ev[i].R;
                 }
                 //Set coordinates, random value
-                do EmtsIniGtb(i); while (EmtsIniGte(i));
+                EmtsIniGtb(i);
                 //set speed, random value
                 double V = 1D / Math.Sqrt(Rn * Ev[i].M);
                 for (int k = 0; k < Rn; k++)
@@ -55,86 +51,34 @@ namespace RandomHSM
         //--------------------------------------------------------------------
         private void EmtsIniGtb(int Ei)
         {
-            int k; double Rr, r, xx, x; CElement ei = Ev[Ei];
+            int k; double Rr, xx, x; CElement ei = Ev[Ei];
 
-            Rr = (r = Rb - ei.R) * r;
-
-            do
+            Rr =  Rb * Rb; do
             {
                 xx = 0D; for (k = 0; k < Rn; k++)
                 {
-                    ei.X[k] = x = r * 2D * (Rd.NextDouble() - 0.5D);
+                    ei.X[k] = x = Rb * 2D * (Rd.NextDouble() - 0.5D);
                     xx += x * x;
                 }
             }
             while (xx >= Rr);
         }//Set random coordinates of Ex element within bound
         //--------------------------------------------------------------------
-        bool EmtsIniGte(int Ei)
-        {
-            int j, k; double Rr, rr, x; CElement ei = Ev[Ei], ej;
-
-            for (j = 0; j < Ei; j++)
-            {
-                ej = Ev[j]; rr = 0D; for (k = 0; k < Rn; k++)
-                {
-                    rr += (x = ej.X[k] - ei.X[k]) * x;
-                }
-
-                Rr = (Rr = ej.R + ei.R) * Rr;
-
-                if (rr <= Rr) return true; 
-            }
-
-            return false;
-        }//Checks for absence of elements union
-        //--------------------------------------------------------------------
         private void EmtsMovAll()
         {
             for (int i = 0; i < En; i++)
             {
-                CElement ei = Ev[i];
-
-                for (int k = 0; k < Rn; k++)
+                CElement ei= Ev[i]; for (int k = 0; k < Rn; k++)
                 {
                         ei.X[k] += ei.V[k] * dT;
                 }
             }
         }//Moves all elements
         //--------------------------------------------------------------------
-        private void EmtsColSel()
-        {
-            if (Ej < 0)
-            {
-                EmtsCollBE(); Cb++; EmtsRegBvt();
-            }
-            else
-            {
-                EmtsCollEE(); Ce++; EmtsRegEvt();
-            }
-        }//Interact elements
-        //--------------------------------------------------------------------
-        private void EmtsCollBE()
-        {
-            double RV, RR, Rr, Vv; int k; CElement ei = Ev[Ei];
-
-            RR = 0D; RV = 0D; for (k = 0; k < Rn; k++)
-            {
-                Rr = ei.X[k];
-                Vv = ei.V[k];
-
-                RR += Rr * Rr;
-                RV += Rr * Vv;
-            }
-
-            Vv = (RR <= 0D) ? (0D) : (2D * RV / RR);
-            for (k = 0; k < Rn; k++) ei.V[k] -= Vv * ei.X[k];
-        }//Bound element interaction
-        //--------------------------------------------------------------------
-        private void EmtsCollEE()
+        private void EmtsColSel(int Ei, int Ej)
         {
             CElement ei = Ev[Ei], ej = Ev[Ej];
-           
+
             double Mi = ei.M;
             double Mj = ej.M;
 
@@ -149,75 +93,33 @@ namespace RandomHSM
                 ei.V[k] = Mipj * (2D * Mj * EjVk + Mimj * EiVk);
                 ej.V[k] = Mipj * (2D * Mi * EiVk - Mimj * EjVk);
             }
-        }//Simplified e-e interaction
+        }//Interact elements
+        //--------------------------------------------------------------------
+        private void EmtsCollBE()
+        {
+            double RV, RR, Rr, Vv; int k; CElement ex = Ev[Rs.E];
+
+            RR = 0D; RV = 0D; for (k = 0; k < Rn; k++)
+            {
+                Rr = ex.X[k];
+                Vv = ex.V[k];
+
+                RR += Rr * Rr;
+                RV += Rr * Vv;
+            }
+
+            Vv = (RR <= 0D) ? (0D) : (2D * RV / RR);
+            for (k = 0; k < Rn; k++) ex.V[k] -= Vv * ex.X[k];
+        }//Bound element interaction
         //--------------------------------------------------------------------
         private void EmtsRegEvt()
         {
-            int k; double x, xx;
-
-            CElement ei = Ev[Ei]; Rs.Ei = Ei;
-            CElement ej = Ev[Ej]; Rs.Ej = Ej;
-
-            xx = 0D; for (k = 0; k < Rn; k++)
+            CElement ex = Ev[Rs.E]; for (int k = 0; k < Rn; k++)
             {
-                Rs.X[k] = x = (ej.X[k] * ei.R + ei.X[k] * ej.R) / (ei.R + ej.R);
-                Rs.V[k] = x;
-                xx += x * x;
-            }
-
-            if (xx == 0D)
-            {
-                for (k = 0; k < Rn; k++)
-                {
-                    Rs.X[k] = 0D;
-                    Rs.V[k] = 0D;
-                }
-                k = Rs.Ei % Rn;
-                Rs.X[k] = Rb;
-                Rs.V[k] = 1D;
-            }
-            else
-            {
-                x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
-                {
-                    Rs.X[k] *= Rb * x;
-                    Rs.V[k] *= x;
-                }
-            }
-        }
-        //--------------------------------------------------------------------
-        private void EmtsRegBvt()
-        {
-            int k; double x, xx;
-
-            CElement ei = Ev[Ei]; Rs.Ei = Ei; Rs.Ej = Ej;
-
-            xx = 0D; for (k = 0; k < Rn; k++)
-            {
-                Rs.X[k] = x =  ei.X[k];
-                Rs.V[k] = x;
-                xx += x * x;
-            }
-
-            if (xx == 0D)
-            {
-                for (k = 0; k < Rn; k++)
-                {
-                    Rs.X[k] = 0D;
-                    Rs.V[k] = 0D;
-                }
-                k = Rs.Ei % Rn;
-                Rs.X[k] = Rb;
-                Rs.V[k] = 1D;
-            }
-            else
-            {
-                x = 1D / Math.Sqrt(xx); for (k = 0; k < Rn; k++)
-                {
-                    Rs.X[k] *= Rb * x;
-                    Rs.V[k] *= x;
-                }
-            }
+                double x = ex.X[k];
+                Rs.X[k] = x; 
+                Rs.V[k] = x / Rb;
+            }        
         }
         //--------------------------------------------------------------------
     }

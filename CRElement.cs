@@ -10,15 +10,12 @@ namespace RandomHSM
         public      double      R;//Radius
         public      double      M;//Radius
 
-        public      int         E;//Element to interact
         public      double      T;//Time to bound
-        public      double      t;//Time to element
         //--------------------------------------------------------------------
         public CElement()
         {
             X = null;
             V = null;
-            E = -1;
         }
         //--------------------------------------------------------------------
         public bool Dim(int Dimension)
@@ -33,7 +30,6 @@ namespace RandomHSM
                 e.Source = "Dim";
                 X = null;
                 V = null;
-                E = -1;
                 return true; 
             }
 

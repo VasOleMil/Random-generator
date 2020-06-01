@@ -6,9 +6,9 @@ namespace RandomHSM
     
     class Program
     {
-        //-------------------------Default  parameters------------------------
-        static int          Dim = 3;                //Dim - dimension  
-        static int          Num = 100;              //numbers to produce
+        //------------------Default parameters--------------------------------
+        static int          Dim = 3;                //Dim - dimension , 
+        static int          Num = 100;              //Sequence length
         //--------------------------------------------------------------------
         static CRandom      Rd = null;
         static FileStream   fs = null;
@@ -20,7 +20,7 @@ namespace RandomHSM
             try
             {
                 int dim = Convert.ToInt32(args[0]); if (3 <= dim && dim <= 8)       Dim = dim;
-                int num = Convert.ToInt32(args[1]); if (1 <= num && num <= 1000)    Num = num;
+                int num = Convert.ToInt32(args[1]); if (1 <= num && num <= 10000)   Num = num;
             }
             catch (Exception e)
             {
@@ -77,29 +77,21 @@ namespace RandomHSM
             //Rd = new CRandom(6, 100, 4.65, 1.0, 10.0);
             //Rd = new CRandom(7, 100, 4.07, 1.0, 10.0);
             //Rd = new CRandom(8, 100, 3.68, 1.0, 10.0);
-            
+
             //Rd = new CRandom(3, 300, 28.5, 1.0, 10.0);
             //Rd = new CRandom(4, 300, 11.8, 1.0, 10.0);
             //Rd = new CRandom(5, 300, 7.71, 1.0, 10.0);
             //Rd = new CRandom(6, 300, 5.92, 1.0, 10.0);
             //Rd = new CRandom(7, 300, 4.97, 1.0, 10.0);
             //Rd = new CRandom(8, 300, 4.43, 1.0, 10.0);
-            
-            switch (Dim)
-            {
-                case 3: Rd = new CRandom(3, 100, 15.8, 1.0, 10.0); break;
-                case 4: Rd = new CRandom(4, 100, 8.00, 1.0, 10.0); break;
-                case 5: Rd = new CRandom(5, 100, 5.70, 1.0, 10.0); break;
-                case 6: Rd = new CRandom(6, 100, 4.65, 1.0, 10.0); break;
-                case 7: Rd = new CRandom(7, 100, 4.07, 1.0, 10.0); break;
-                case 8: Rd = new CRandom(8, 100, 3.68, 1.0, 10.0); break;
-            }
+
+            Rd = new CRandom(3, 100);
 
             for (int i = 0; i < Num; i++)
             {
                 Rd.Next();
 
-                String rs = "{"+ Rd.Rs.V[0].ToString("G8").Replace(",","."); 
+                String rs = "{" + Rd.Rs.V[0].ToString("G8").Replace(",", ".");
                 for (int k = 1; k < Dim; k++) rs += ",\t" + Rd.Rs.V[k].ToString("G8").Replace(",", "."); rs += "},";
                 Console.WriteLine("{0}", rs);
             }

@@ -5,7 +5,7 @@ For example to obtain one dimensional sequence with values from -1 to +1 it is n
 
 Thanks to this, it is possible to obtain parameters of uniform distribution, such as fluctuation, and accordingly the model is a source of data for calibration of distributions related to reliability.
 
-What is next step? Productivity of generator is comparable with Mathematica 12 RandomReal function. One is quite slow but advantage of generator proposed is theoretically clear base, and cryptographic strength.
+One is quite slow but advantage of generator proposed is theoretically clear base, and cryptographic strength.
 
 1. https://www.facebook.com/groups/249701935475374/permalink/631840700594827/
 2. https://www.facebook.com/groups/249701935475374/permalink/640307096414854/

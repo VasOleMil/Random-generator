@@ -1,11 +1,11 @@
-# Random-generator
-Simple physics model, fast interaction.  For the fun, as addition to compressor based on hard sphere model[1] i wrote a continuous random number generator, actually one generates events on the sphere surface but due to the theorem[2], without two dimensions from initial, acting equal to volume distribution. So i 've managed to obtain continuous volume generation within sphere.
+# Random-generator (HSM-PRNG)
 
-For example to obtain one dimensional sequence with values from -1 to +1 it is necessary to create three dimensional generator and take only one coordinate. 
+Simple physical model, fast simplified interaction. Addition to compressor based on hard sphere model, continuous prng.  Random source - interaction events on the sphere surface. Due to the PDF property[1], without two dimensions from initial, may produce even volume distribution. But requires not static projection in high dimensions.
 
-Thanks to this, it is possible to obtain parameters of uniform distribution, such as fluctuation, and accordingly the model is a source of data for calibration of distributions related to reliability.
+To obtain one dimensional sequence with values from -1 to +1 it is necessary to create three dimensional generator and take only one coordinate. 
 
-One is quite slow but advantage of generator proposed is theoretically clear base, and cryptographic strength.
+Provides simple tests on generated sequence: volume hystogram and bitmap with 2D projection. 
 
-1. https://www.facebook.com/groups/249701935475374/permalink/631840700594827/
-2. https://www.facebook.com/groups/249701935475374/permalink/640307096414854/
+One is slower in low dimesions, but may reach higher than arythmetic prng productivity in random vector generation. Due to sqrt in reflecting function, sequence is unpredictable and not repeatable for the use of partial vector.
+
+1. https://uk.wikipedia.org/wiki/Гіперкульовий_сегмент#Приклади_використання

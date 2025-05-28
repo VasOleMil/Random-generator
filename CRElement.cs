@@ -6,34 +6,24 @@ namespace RandomHSM
     {
         //--------------------------------------------------------------------
         public      double []   X;//Coordinares
+        public      double []   x;//Coordinares
         public      double []   V;//Speeds
         public      double      R;//Radius
         public      double      M;//Radius
-
         public      double      T;//Time to bound
         //--------------------------------------------------------------------
         public CElement()
         {
             X = null;
+            x = null;
             V = null;
         }
         //--------------------------------------------------------------------
-        public bool Dim(int Dimension)
+        public void Dim(long Rn)
         {
-            try
-            {
-                X = new double[Dimension];
-                V = new double[Dimension];
-            }
-            catch (Exception e) 
-            { 
-                e.Source = "Dim";
-                X = null;
-                V = null;
-                return true; 
-            }
-
-            return false;
+            X = new double[Rn];
+            x = new double[Rn];
+            V = new double[Rn];          
         }
         //--------------------------------------------------------------------
     }

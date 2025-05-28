@@ -9,118 +9,111 @@ namespace RandomHSM
         //--------------------------------------------------------------------
         private void EmtsIni()
         {
-            //Allocate resources
-            try
+            //Allocate resources            
+            Ev = new CElement[En]; long i;
+
+            for (i = 0L; i < En; i++)
             {
-                Ev = new CElement[En]; for (int i = 0; i < En; i++) Ev[i] = new CElement();
+                Ev[i] = ei = new CElement(); ei.Dim(Rn);
             }
-            catch (Exception e)
-            {
-                e.Source = "EmtsIni";
-                Ev = null;
-                return;
-            }
-            //Allocate resources
-            for (int i = 0; i < En; i++) if(Ev[i].Dim(Rn))
-            {
-                //throw exeption
-                Ev = null;
-                return;
-            }
+
             //init elements
-            for (int i = 0; i < En; i++) 
+            for (ra = 0.02D * dR, i = 0L; i < En; i++) 
             {
                 //Set Radius of element
-                Ev[i].R = Re * (1D + 0.01 * dR * 2D * (Rd.NextDouble() - 0.5D));
+                ei = Ev[i]; ei.R = rk = Re * (1D + ra * (Rd.NextDouble() - 0.5D));
                 //Set mass
-                Ev[i].M = Vgamma(Rn);
-                for (int k = 0; k < Rn; k++)
-                {
-                    Ev[i].M *= Ev[i].R;
-                }
-                //Set coordinates, random value
-                EmtsIniGtb(i);
-                //set speed, random value
-                double V = 1D / Math.Sqrt(Rn * Ev[i].M);
-                for (int k = 0; k < Rn; k++)
-                {
-                    Ev[i].V[k] = V * 2D * (Rd.NextDouble() - 0.5D);
-                }
+                Mi = Vg; for (k = 0L; k < Rn; k++) Mi *= rk; ei.M = Mi;
+                //Set random coordinates
+                EmtsIniGtb();
+                //set random speed
+                Vi = 2D * Re / Math.Sqrt(Rn * Mi); //set unit radius max speed
+                for (k = 0L; k < Rn; k++) ei.V[k] = Vi * (Rd.NextDouble() - 0.5D);
             }
         }
         //--------------------------------------------------------------------
-        private void EmtsIniGtb(int Ei)
+        private void EmtsIniGtb()
         {
-            int k; double Rr, xx, x; CElement ei = Ev[Ei];
-
-            Rr =  Rb * Rb; do
+            Mm = 2D * Rb; do
             {
-                xx = 0D; for (k = 0; k < Rn; k++)
+                for (rr = 0D, k = 0L; k < Rn; k++)
                 {
-                    ei.X[k] = x = Rb * 2D * (Rd.NextDouble() - 0.5D);
-                    xx += x * x;
+                    ei.X[k] = rk = Mm * (Rd.NextDouble() - 0.5D);
+                    rr += rk * rk;
                 }
             }
-            while (xx >= Rr);
-        }//Set random coordinates of Ex element within bound
+            while (rr >= RS);
+        }//Set random coordinates of ex element within bound
         //--------------------------------------------------------------------
         private void EmtsMovAll()
         {
-            for (int i = 0; i < En; i++)
+            for (long i = 0L; i < En; i++)
             {
-                CElement ei= Ev[i]; for (int k = 0; k < Rn; k++)
+                for (ei = Ev[i], k = 0L; k < Rn; k++) 
                 {
-                        ei.X[k] += ei.V[k] * dT;
+                    ei.X[k] += ei.V[k] * dT;
                 }
             }
         }//Moves all elements
         //--------------------------------------------------------------------
-        private void EmtsColSel(int Ei, int Ej)
+        private void EmtsColSel()
         {
-            CElement ei = Ev[Ei], ej = Ev[Ej];
+            //if (Em % 3L == 1L) return; //P = 1/3
 
-            double Mi = ei.M;
-            double Mj = ej.M;
+            //Select two elements
+            Ei = Em < En - 1 ? Em + 1 : 0; ei = Ev[Ei];
+            Ej = 0 < Em ? Em - 1 : En - 1; ej = Ev[Ej];
 
-            double Mimj = (Mi - Mj);
-            double Mipj = 1D / (Mi + Mj);
 
-            for (int k = 0; k < Rn; k++)
+            //Interact selected elements
+            Mi = ei.M;
+            Mj = ej.M;
+
+            Mm = (Mi - Mj);
+            Mp = 1D / (Mi + Mj);
+
+            for (k = 0L; k < Rn; k++)
             {
-                double EiVk = ei.V[k];
-                double EjVk = ej.V[k];
+                
+                Vi = ei.V[k];
+                Vj = ej.V[k];
 
-                ei.V[k] = Mipj * (2D * Mj * EjVk + Mimj * EiVk);
-                ej.V[k] = Mipj * (2D * Mi * EiVk - Mimj * EjVk);
+                ei.V[k] = Mp * (2D * Mj * Vj + Mm * Vi);
+                ej.V[k] = Mp * (2D * Mi * Vi - Mm * Vj);
             }
-        }//Interact elements
+            //Calculate selected tti
+            ex = ei; TimeCalcBE();
+            ex = ej; TimeCalcBE(); 
+        }
+        //interact near em elements, P = 1
         //--------------------------------------------------------------------
         private void EmtsCollBE()
         {
-            double RV, RR, Rr, Vv; int k; CElement ex = Ev[Rs.E];
-
-            RR = 0D; RV = 0D; for (k = 0; k < Rn; k++)
+            for (rr = 0D, rv = 0D, k = 0L; k < Rn; k++) 
             {
-                Rr = ex.X[k];
-                Vv = ex.V[k];
-
-                RR += Rr * Rr;
-                RV += Rr * Vv;
+                rk = em.X[k]; rr += rk * rk;
+                vk = em.V[k]; rv += rk * vk;
             }
 
-            Vv = (RR <= 0D) ? (0D) : (2D * RV / RR);
-            for (k = 0; k < Rn; k++) ex.V[k] -= Vv * ex.X[k];
-        }//Bound element interaction
-        //--------------------------------------------------------------------
-        private void EmtsRegEvt()
+            ra = 2D / ((rr == 0D) ? 0D : rr);//RS? //ra = 2D / RS;
+            vv = ra * rv;
+   
+            for (k = 0L; k < Rn; k++) em.V[k] -= vv * em.X[k];
+        }//Bound em element interaction
+         //--------------------------------------------------------------------
+        private void EmtsCollBS()
         {
-            CElement ex = Ev[Rs.E]; for (int k = 0; k < Rn; k++)
+            for (rr = 0D, rv = 0D, k = 0L; k < Rn; k++)
             {
-                double x = ex.X[k];
-                Rs.X[k] = x; 
-                Rs.V[k] = x / Rb;
-            }        
-        }
-        //--------------------------------------------------------------------
+                rk = ex.X[k]; rr += rk * rk;
+                vk = ex.V[k]; vv += vk * vk; 
+            }
+
+            ra = 1D / ((rr == 0D) ? 0D : rr);
+            rv = Math.Sqrt(vv * ra);
+
+            for (k = 0L; k < Rn; k++) ex.V[k] -= rv * ex.X[k];
+        }//Bound em element interaction, force speed alignment to center
+        //--------------------------------------------------------------------  
     }
 }

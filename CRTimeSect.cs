@@ -7,64 +7,76 @@ namespace RandomHSM
 		//--------------------------------------------------------------------
 		void TimeIni()
 		{
-			for (int i = 0; i < En; i++)
+			for (long i = 0L; i < En; i++)
 			{
-				TimeCalcBE(i); 
+				ex = Ev[i]; TimeCalcBE(); 
 			}
 		}
 		//--------------------------------------------------------------------
-		private void TimeCalcBE(int Ex)
+		private void TimeCalcBE()
 		{
-			double VV, RV, RR, TT, LL, Vv, Rr; int  k; CElement ex = Ev[Ex];
-
-			RR = 0D; VV = 0D; RV = 0D; for (k = 0; k < Rn; k++)
+			for (rr = 0D, rv = rr, vv = rr, k = 0L; k < Rn; k++) 
 			{
-				Rr = ex.X[k];
-				Vv = ex.V[k];
+				rk = ex.X[k];
+				vk = ex.V[k];
 
-				RR += Rr * Rr;
-				RV += Rr * Vv;
-				VV += Vv * Vv;
+				rr += rk * rk;
+				rv += rk * vk;
+				vv += vk * vk;
 			}
-
-			LL = Rb * Rb - RR;
-
-			if ((LL <= 0D) && (RV >= 0D))
+			//Variables for readability
+			a = vv; b = rv; c = rr - RS;
+			//Theory, eternal rest
+            if (a == 0D) { ex.T = Rb * En * En; return; }
+			//Return escapers
+			if (+Dc <= c && b >= -Ds) 
 			{
-				ex.T = 0D;				
+                EmtsCollBS();	//Use precalced values
+                b = -rv * rr;	//Sqrt(vv / rr) * rr
+            }
+			//Get time change
+			if (-Ds <= b && b <= +Ds)
+			{
+                c = (c < 0D) ? -c : +c;
+                dt = Math.Sqrt(-c / a);
 			}
 			else
 			{
-				TT = VV * LL + RV * RV;
-				ex.T = (TT <= 0D) ? (-1D) : (VV == 0D) ? (-1D) : ((-RV + Math.Sqrt(TT)) / VV);
-			}
-		}//Calculate Ex element  tti
-		//--------------------------------------------------------------------
-		private void TimeGetStp()
-		{
-			int i; CElement ei; double Tm;
+				A = (a * c) / (b * b);
+				A = Math.Sqrt(1D - A);
 
-			Rs.E = 0; ei = Ev[0]; Tm = ei.T;
+				c = (b > 0D) ? +A : -A;
+				dt = b / a * (-1D + c);
+			}
+			//Save final position
+            for (k = 0L; k < Rn; k++)
+            {
+				ex.x[k] = ex.X[k] + ex.V[k] * dt;
+            }   ex.T = dt;  //save time
+
+        }//Calculate Ex element  tti
+         //--------------------------------------------------------------------
+        private void TimeGetStp()
+		{
+			Em = 0L; em = Ev[Em]; dT = em.T;
 			
-			for (i = 1; i < En; i++)
+			for (long i = 1L; i < En; i++)
 			{
-				ei = Ev[i]; if (ei.T < Tm)
+				ei = Ev[i]; dt = ei.T; if (dt < dT)
 				{
-					Tm = ei.T;
-					Rs.E = i;
+					dT = dt; Em = i;
 				}
 			}
-			
-			dT = Ev[Rs.E].T; 
-		}//Select minimal tti Tm from Ev
+			em = Ev[Em];
+		}//Select minimal tti from Ev, sets Em,em
 		//--------------------------------------------------------------------
 		private void TimeDecStp()
-        	{
-	        	for (int i = 0; i < En; i++)
+        {
+	        for (long i = 0L; i < En; i++)
 			{
 				Ev[i].T -= dT;
 			}
-        	}//Decreases times
+        }//Decreases times
 		//--------------------------------------------------------------------
 	}
 }

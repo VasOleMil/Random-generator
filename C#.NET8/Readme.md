@@ -2,6 +2,8 @@
 
 This repository implements a high-performance, hardware-aware asynchronous event-driven initialization [engine for hard-sphere packaging](https://github.com/VasOleMil/Compressor) and thermalization tasks in multi-dimensional spaces ($3D$ to $12D$). With virtual particle speed interchange linear complexity is reduced to fixed, further simplification - lowering beyond unit ratio of direction/speed interchange events shows non random behaviour.
 
+![7D Sphere surface](SRandom.Rep-07-40000.png)
+
 ## Implementation Peculiarities:
 
 * **Precision-Oriented (Mantissa Bit Restoration):** The solver utilizes a full time-predictor equation form combined with a cubic Halley step to restore lost bits of the double-precision (`double`) mantissa after square root operations. This rigorous approach completely eliminates out-of-range position generation and prevents idle time-stepping drift when subtracting the time-span $dT$ near bounding walls. The additional computational load of the high-precision predictor is compensated by the simplicity of linear approximations when calculating time-spans in the immediate vicinity of the boundary.

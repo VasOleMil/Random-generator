@@ -1,0 +1,166 @@
+﻿using System;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
+
+using RandomHSM.src;
+
+namespace RandomHSM.ver
+{   
+    internal class Program
+    {
+        //------------------Default parameters--------------------------------
+        static long          Dim = 6L;               //Dim - dimension 
+        static long          Stp = 40000;              //Num number of steps
+        //--------------------------------------------------------------------
+        static CRandom       Rd = null;
+        static FileStream    fs = null;
+        static StreamWriter  sw = null;
+        static StreamWriter  st = null;
+        static long          Hn = 200L;
+        static long[]        Hm = null;
+        static double        Hs;
+        static Bitmap        Bm = null;
+        static Graphics      Gr = null;
+        static int           Bh = 600;
+        static int           Bw = 600;
+        static Color         Bc = Color.Blue;
+        //--------------------------------------------------------------------
+        static void SetInputParameters(string[] args)
+        {
+            try
+            {
+                long dim = Convert.ToInt64(args[0]); if (3 <= dim && dim <=    12  )   Dim = dim;
+                long stp = Convert.ToInt64(args[1]); if (3 <= stp && stp <= 1000000)   Stp = stp;
+            }
+            catch (Exception e)
+            {
+                e.Source = "SetInputParameters";
+                Console.WriteLine("Default values");
+            }
+        }//Set input parameters if present
+         //--------------------------------------------------------------------
+        static void IniOutToFile()
+        {
+            if (sw == null)
+            {
+                st = new StreamWriter(Console.OpenStandardOutput()); st.AutoFlush = true;
+                string fn = "Rep-" + Dim.ToString("D2") + "-" + Stp.ToString("D3") + ".json";
+                Console.WriteLine("Dim:\t{0:D2}\nNum:\t{1:D3}\nFile:\t{2}", Dim, Stp, fn);
+                fs = new FileStream(fn, FileMode.Create, FileAccess.Write, FileShare.Read);
+                sw = new StreamWriter(fs);
+
+                Bm = new Bitmap(Bw, Bh, PixelFormat.Format32bppArgb);
+                Gr = Graphics.FromImage(Bm);
+            }
+        }// Init streams:  file and console
+         //--------------------------------------------------------------------
+        static void SetOutToFile()
+        {
+            st.Flush(); Console.SetOut(sw);
+        }// Redirect out to log file
+         //--------------------------------------------------------------------
+        static void SetOutToCons()
+        {
+            sw.Flush(); Console.SetOut(st);
+        }// Redirect out to console
+        //--------------------------------------------------------------------
+        static void RemOutToFile()
+        {
+            if (sw != null)
+            {
+                Console.WriteLine("}");//close json structure
+                
+                Bm.Save("Rep-" + Dim.ToString("D2") + "-" + Stp.ToString("D3") + ".png", ImageFormat.Png);
+                Bm.Dispose(); Bm = null;    
+                Gr.Dispose(); Gr = null;    
+                sw.Flush(); sw.Close(); sw = null;
+            }
+
+            Console.SetOut(st);
+        }// Redirect out to console
+        //--------------------------------------------------------------------
+        static void Prepare_Step()
+        {
+            for (long i = 0L; i < Hn; i++) Hm[i] = 0L;   
+            Console.Write("{\n\"values\":[\n");
+        }// Set start of json array
+        //--------------------------------------------------------------------
+        static void ReportOnStep(long i)
+        {
+            string rs;
+            rs = "[" + Rd.Rs.V[0].ToString("G15").Replace(",", ".");
+            for (long k = 1; k < Dim; k++) rs += ",\t" + Rd.Rs.X[k].ToString("G15").Replace(",", ".");
+            rs += "]"; if (i < Stp) rs += ","; else rs += "]"; Console.WriteLine("{0}", rs);
+
+        }// (i == Stp) - end of json array
+         //--------------------------------------------------------------------
+        static void HystogramStp()
+        {
+            double rk, rr = 0D; long k;
+            for (k = 0L; k < Dim - 2; k++) 
+            {
+                rk = Rd.Rs.X[k]; rk *= rk; rr += rk;
+            }
+            k = (long)(Hs * Math.Sqrt(rr));
+            k -= k == Hn ? 1L : 0L; Hm[k]++;
+
+            Bm.SetPixel(4 + (int)((Rd.Rs.X[0] + 1.0F) * ((Bw-10) /2)), 4 + (int)((Rd.Rs.X[1] + 1.0F) * ((Bh-10) /2)), Bc);
+        }
+        //--------------------------------------------------------------------
+        static void HystogramRep()
+        {
+            string rs = ",\"density\":[\n";
+            long k = Dim - 2L, e = Hn - 1L, n = k - 1L;
+            double R = 1D, S = R / Hn, V = Hn * R / (Stp * k), t;
+
+            for (k = 0L; k < Hn; k++)
+            {
+                rs += "[" + (t = S * (k + 1L)).ToString("G8").Replace(",", ".") + ",\t";
+                rs += (Math.Pow(R / t, n) * V * Hm[k]).ToString("G8").Replace(",", ".") + "]";
+                if (k < e) rs += ",\n"; else rs += "]";
+            }
+            Console.WriteLine("{0}", rs);
+        }
+        //--------------------------------------------------------------------
+        private static int Main(string[] args)
+        {
+            // Get program parameters
+            SetInputParameters(args);
+            
+            try // Create random generator
+            {   
+                Rd = new CRandom(Dim, 100L); // use 100 elements
+               
+                Hm = new long[Hn]; Hs = Hn; // hystogram
+                
+                IniOutToFile(); // create and report about log file
+            }
+            catch (Exception e)
+            {
+                e.Source = "Main->resource allocation"; return 1;
+            }
+            
+            SetOutToFile(); //Redirect out to log file
+
+            //Rd.TEnergy(); double kT = Rd.kT; Console.WriteLine("E0 = {0:G15}", (kT).ToString("G15").Replace(",", "."));
+
+            for (long i = 1L; i <= 400000; i++) Rd.Next();//warm random generator                
+
+            Prepare_Step();
+            for (long i = 1L; i <= Stp; i++)
+            {
+                Rd.Next();//Step random generator
+                //Rd.TEnergy(); Console.WriteLine("Ee = {0:G15}", (Rd.kT).ToString("G15").Replace(",", "."));
+                HystogramStp( );
+                ReportOnStep(i);
+            }
+            HystogramRep();
+
+            //Rd.TEnergy(); Console.WriteLine("Ed = {0:G15}", (1D-Rd.kT/kT).ToString("G15").Replace(",", "."));
+
+            //Finally //Console.ReadKey(); //if necessary
+            RemOutToFile(); return 0;  //fail safe report
+        }
+    }
+}

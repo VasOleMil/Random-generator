@@ -1,6 +1,8 @@
 # Random-generator (HSM-PRNG)
 
-Simple physical model, simplified virtual interaction. Addition to compressor based on hard sphere model, continuous PRNG. Due to the [PDF property](https://uk.wikipedia.org/wiki/Гіперкульовий_сегмент#Приклади_використання) without two dimensions from initial, may produce even volume distribution. 
+Simple physical model, simplified virtual interaction. Addition to [compressor](https://github.com/VasOleMil/Compressor) based on hard sphere model, continuous PRNG. 
+
+**High-Dimensional Anisotropic Density Sampling:** For specialized workflows requiring complex non-uniform distributions, this engine bypasses the typical "curse of dimensionality." By utilizing the [property](https://uk.wikipedia.org/wiki/Гіперкульовий_сегмент#Приклади_використання) of hyperspherical segment projection ($R_n + 2 \to R_n$), it acts as a native volumetric and surface generator, that can create perfectly controlled, high-density anisotropic fields—a task where standard arithmetic coordinate samplers completely fail due to boundary-locking and corner-weighting issues.
 
 To obtain one dimensional sequence with values from -1 to +1 it is necessary to create three dimensional generator and take only one coordinate. Provides simple tests on generated sequence: volume hystogram and bitmap with 2D projection. One is slower in low dimesions, but may reach higher than arythmetic prng productivity in random vector generation. Due to sqrt in reflecting prediction function, sequence is unpredictable and not repeatable for the use of partial vector. 
 
@@ -14,6 +16,6 @@ Unlike purely arithmetic pseudo-random generators that operate on finite, period
 
 Beyond high-dimensional physics simulations, this asynchronous hard-sphere engine serves as a specialized architectural alternative to standard PRNGs:
 
-**Hardware Generator Emulation & Cross-Verification (TRNG Mirroring)**: Because the engine extracts true macroscopic entropy by chaotic "mining" of hardware-level floating-point rounding errors across different CPU generations, it can act as a fully decentralized software-based emulator or a verification shadow for True Random Number Generators (TRNGs).
+**Hardware Generator Emulation & Cross-Verification (TRNG Mirroring & RDRAND Shadows)**: For Unix/Linux systems requiring deep transparency, relying solely on hardware primitives like Intel/AMD's instruction `RDRAND` often draws criticism regarding black-box obscurity and a lack of auditability. This solver provides a complete, open-source software-based emulation matrix. Because the engine extracts true macroscopic entropy by chaotic "mining" of hardware-level floating-point rounding errors across different CPU generations, it can act as a fully decentralized software-based emulator or a verification shadow for True Random Number Generators (TRNGs).
 
 **Analytical Process Control & Traceability**: In systems where strict auditing of the randomized pipeline is required, traditional arithmetic generators often fail to provide geometric or physical context. This solver provides deep analytical control over the evolution of randomness. Because every step of the phase-space shuffling is constrained by deterministic conservation laws (energy, momenta, and center of mass), the trajectory of the entropy expansion remains structurally verifiable and traceable at any given point in time.

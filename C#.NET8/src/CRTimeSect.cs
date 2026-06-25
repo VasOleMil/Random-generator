@@ -72,7 +72,7 @@ namespace RandomHSM.src
 				{
 					dT = dt; Em = i;
 				}
-			} 	em = Ev[Em]; Ta += Ar*(dT - Ta);
+			} 	em = Ev[Em]; Ta += Ar * (dT - Ta);
 		}// Select minimal tti from Ev, sets Em,em
 		//--------------------------------------------------------------------
 		private void TimeDecStp()

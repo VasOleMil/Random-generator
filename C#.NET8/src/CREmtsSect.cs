@@ -187,9 +187,9 @@ namespace RandomHSM.src
                 // either uniformly across all particles
                 // or targeted using j-scaled average unit impulse
                 // log_2(j) + 1 = 4 last bits loss on summing
-                j = 8L; rk = Xs[k]; j = (j >= Bn) ? Bn : j; 
-                n = (j * (long)(rk / Math.Abs(vk))); // scaler
-                n = ((n < 1) ? 1 : n); n = ((n > Bn) ? Bn : n); 
+                j = 8L; rk = Xs[k]; j = (j > Bn) ? Bn : j;
+                n = ( j  * (long) (rk / Math.Abs(vk))); // scaler
+                n = ( (n < 1) ? 1 : (n > Bn) ? Bn : n);
                 for (vk /= n, i = 0L; i < n ; i++)
                 {
                     ei = Ev[i]; ei.V[k] -= vk / ei.M;
@@ -352,7 +352,7 @@ namespace RandomHSM.src
             Xe = em.X; Ve = em.V; rv = 0D;
 
             for (k = 0L; k < Rn; k++) rv += Xe[k] * Ve[k];
-            //rv = (Ka>X)? rv-Ds : (Ka<x)? rv+Ds:a; 
+            //rv= (Ka>X)? rv-Ds : (Ka<x)? rv+Ds:rv; 
             rv *= 2D * em.a; // kT regulation place
    
             for (k = 0L; k < Rn; k++) Ve[k] -= rv * Xe[k];

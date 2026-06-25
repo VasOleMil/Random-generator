@@ -48,8 +48,8 @@ namespace RandomHSM.src
             }   Mb  /= Bn;
             //  Init RandomSphereXC() arrays and variables
             rn = Rn + 4L; // use Rn + 2 with one pass normalising
-            rr = 1D / Math.Sqrt(2D);         // used in rr -> IC
-            ra = 1D / Math.Sqrt((double)rn); // used in ra -> BC
+            //ra = 1D / Math.Sqrt(2D);        // used in ra -> IC
+            ra = 1D / Math.Sqrt((double)rn);  // used in ra -> BC
             Xs = new double[rn]; // multiplier for speed scale
             Vs = new double[rn]; Mp = Math.Sqrt(3D * KT / Mb);
             do  //  Since initial placing may not suit physically
@@ -142,8 +142,8 @@ namespace RandomHSM.src
                 e = Rd.NextInt64()%rn; do j = Rd.NextInt64()%rn; while (e == j);
 
                 Mi = Xs[e]; Mj = Xs[j];
-                Xs[e] = rr * (Mj - Mi);
-                Xs[j] = rr * (Mj + Mi); // rr = 1.0 / sqrt(2.0)
+                Xs[e] = ra * (Mj - Mi);
+                Xs[j] = ra * (Mj + Mi); // rr = 1.0 / sqrt(2.0)
             }   //Simple fast random point generation on unit radius rn-sphere
         }// Generate  coordinates & speeds on unit sphere surface
         //--------------------------------------------------------------------
@@ -326,7 +326,7 @@ namespace RandomHSM.src
         //--------------------------------------------------------------------
         private void EmtsCollEE()
         {
-            //if (Em % 2L == 0L) return; //P = 1/2, sparsed
+            //if (Em % 2L == 0L) return; //P = 1/2, sparsed try
 
             //Select two adjuscent to Em elements
             Ei = Em < Bn - 1 ? Em + 1 : 0; ei = Ev[Ei]; Vi = ei.V;
@@ -352,7 +352,7 @@ namespace RandomHSM.src
             Xe = em.X; Ve = em.V; rv = 0D;
 
             for (k = 0L; k < Rn; k++) rv += Xe[k] * Ve[k];
-
+            //rv = (Ka>X)? rv-Ds : (Ka<x)? rv+Ds:a; 
             rv *= 2D * em.a; // kT regulation place
    
             for (k = 0L; k < Rn; k++) Ve[k] -= rv * Xe[k];

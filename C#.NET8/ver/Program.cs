@@ -10,7 +10,7 @@ namespace RandomHSM.ver
     internal class Program
     {
         //------------------Default parameters--------------------------------
-        static long          Dim = 6L;               //Dim - dimension 
+        static long          Dim = 7L;                 //Dim - dimension 
         static long          Stp = 40000;              //Num number of steps
         //--------------------------------------------------------------------
         static CRandom       Rd = null;

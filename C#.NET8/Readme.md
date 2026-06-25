@@ -14,7 +14,24 @@ This repository implements a high-performance, hardware-aware asynchronous event
 
 _Note on control long-time memory tails:_  to identify precisely the termination of the thermalization phase (typically $400K+$ asynchronous steps for 100 elements), the system tracks $Ta$ — an Exponential Moving Average (EMA) mean free time $\tau$, calculated over an $1/Ar = 64$ step window. Furthermore ($Ka = Rn \cdot kT$), to prevent smooth, non-ergodic energy drift, a modified multiplier can be implemented within `EmtsCollBE`: the introduction of $Ds$  - scalar product drift (near-LSB bit-doping) keeps the system parameters securely anchored within the corresponding physical range.
 
-_Note on Boundaries:_ alignment using a static geometric elements probabilty interact/move (`Pbound`) allows for clean analytical derivation. However, to align the boundary with a dynamic physical model—where the boundary/element interaction ratio is perfectly balanced — the full Compressor model configuration must be used, accounting for exact particle quantities and geometric radii.
+_Note on Boundaries:_ alignment using a static geometric elements probabilty interact/move (`Pbound`) allows for clean analytical derivation. However, to align the boundary with a dynamic physical model—where the boundary/element interaction ratio is perfectly balanced — the full Compressor model configuration must be used, accounting for exact particle quantities and geometric radii. Program uses fixed unit ratio, so given adjusments are about abstract scale correspondance, not about frequencies of root (irrational provider) involving in generation. 
+
+## Common Notation & Glossary
+
+To maintain consistency with the core [Compressor Wiki](https://github.com/VasOleMil/Compressor/wiki#common-notation), the following physical and computational variables are used across the solver:
+
+* **$Rn$:** the target physical space dimension (working hyperspace, e.g., $6D$).
+* **$rn$:** the expanded initialization dimension ($R_n + 4$) used as an entropy filter for uniform seeding.
+* **$Bn$:** total number of elements (hard spheres) inside the bounding container.
+* **$Rb$:** bounding sphere radius acting as the physical boundary of the system.
+* **$Re$:** base (average) radius of an individual physical element.
+* **$Mi$ / $Mb$:** individual mass of an element / average mass, used for kinetic scaling.
+* **$kT$:** thermodynamic temperature constraint (target kinetic energy scaling parameter).
+* **$\tau$:** the omitted in output eventual time span, mean free time.
+* **$Ta$ / $Ar$:** Exponential Moving Average (EMA) value / EMA step window ($1/Ar = 64$).
+* **$Dm$**: machine precision, unit float accuracy: value about 10E-16. 
+* **$Ds$:** near-LSB (least significant bit) noise drift estimation $Ds=Dm\cdot sqrt{Rn}(r+v)\to 2 Rb Dm\cdot sqrt{Rn},\quad r=v=Rb$.
+* **`VV`:** spatial clearance indicator (free path check flag) used by the iterative mass-center normalizer.
 
 ## Acknowledgements:
 Special thanks to the Gemini LLM group (Google) for analytical collaboration, verification of mathematical boundaries, and assistance in debugging the thermodynamic phase-space constraints during the development of this C# implementation.

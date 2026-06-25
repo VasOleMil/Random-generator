@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 
 namespace RandomHSM.src
 {
@@ -354,7 +353,7 @@ namespace RandomHSM.src
 
             for (k = 0L; k < Rn; k++) rv += Xe[k] * Ve[k];
 
-            rv *= 2D * em.a;
+            rv *= 2D * em.a; // kT regulation place
    
             for (k = 0L; k < Rn; k++) Ve[k] -= rv * Xe[k];
         }// Bound em element interaction

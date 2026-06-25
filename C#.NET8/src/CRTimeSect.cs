@@ -58,7 +58,8 @@ namespace RandomHSM.src
             }   else {         dt = -0D;          }     
             //  Save times and position for computational economy
             //  since not all saved for validation data used
-            ex.T = ex.t = dt; for (k = 0L; k < Rn; k++) Xi[k] = Xe[k]; 
+            ex.T = ex.t = dt; Ka += Ar * (a * ei.M - Ka);
+            for (k = 0L; k < Rn; k++) Xi[k] = Xe[k]; 
         }// Calculate ex element  tti
         //--------------------------------------------------------------------
         private void TimeGetStp()
@@ -71,7 +72,7 @@ namespace RandomHSM.src
 				{
 					dT = dt; Em = i;
 				}
-			} 	em = Ev[Em];
+			} 	em = Ev[Em]; Ta += Ar*(dT - Ta);
 		}// Select minimal tti from Ev, sets Em,em
 		//--------------------------------------------------------------------
 		private void TimeDecStp()

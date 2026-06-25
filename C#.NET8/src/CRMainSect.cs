@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 
 namespace RandomHSM.src
 {
@@ -15,16 +14,20 @@ namespace RandomHSM.src
         public CEvent           Rs;//Return sequence
         public double           KT;//initial kT
         public double           kT;//current kT
+        public double           Ka;// mean kT * Rn
+        public double           Ta;// mean free time, span, tti
 
         //Service
         internal Random         Rd;//Random generator
 
         //Misc constants
+       
         internal long           rn;// Rn + 2
         internal double         ra;// 1/ Sqrt(rn) 
         internal double         RN;// Sqrt(Rn) 
         internal double         Dm;// double accuracy, Drange()
         internal double         dA;// dA = 2.0 * sqrt(2.0 * Dm)
+        internal double         Ar;// Ar = 1.0 / 64.0; 64 steps 15% accuracy 
         internal double         Ds;// -0- , b calculational drift
         internal double         De;// -0- , c calculational drift
         internal double         Vg;// Vgamma()
@@ -86,7 +89,7 @@ namespace RandomHSM.src
             EmtsIni();
             TimeIni();
         }//Object construction
-         //--------------------------------------------------------------------
+        //--------------------------------------------------------------------
         internal void MainIni()
         {                        
             Drange(); 
@@ -135,8 +138,8 @@ namespace RandomHSM.src
         internal void Drange()
         {
             double  Unit = 1.00D; KT = Rb * Rb * Mb / Rn;
-            double  Step = 10.0D; 
-            double  Shift = Unit;
+            double  Step = 10.0D; Ka = Rn * KT;
+            double  Shift = Unit; Ar = 1D / 64D; Ta = 1D;
 
             while (Unit + Shift != Unit) Shift /= Step; RN = Math.Sqrt(Rn);
 

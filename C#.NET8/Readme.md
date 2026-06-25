@@ -14,7 +14,7 @@ This repository implements a high-performance, hardware-aware asynchronous event
 
 _Note on control long-time memory tails:_  to identify precisely the termination of the thermalization phase (typically $400K+$ asynchronous steps for 100 elements), the system tracks $Ta$ — an Exponential Moving Average (EMA) mean free time $\tau$, calculated over an $1/Ar = 64$ step window. Furthermore ($Ka = Rn \cdot kT$), to prevent smooth, non-ergodic energy drift, a modified multiplier can be implemented within `EmtsCollBE`: the introduction of $Ds$  - scalar product drift (near-LSB bit-doping) keeps the system parameters securely anchored within the corresponding physical range.
 
-_Note on Boundaries:_ alignment using a static geometric elements probabilty interact/move (`Pbound`) allows for clean analytical derivation. However, to align the boundary with a dynamic physical model—where the boundary/element interaction ratio is perfectly balanced — the full Compressor model configuration must be used, accounting for exact particle quantities and geometric radii. Since this program strictly utilizes a fixed unit ratio, any provided adjustments serve exclusively to ensure abstract scale correspondence within the floating-point representation. Scale do not change the underlying frequencies of the root-driven (irrational provider) events that inherently fuel the system's variance.
+_Note on Boundaries:_ alignment using a static geometric elements probabilty interact/move (`Pbound`) allows for clean analytical derivation. However, to align the boundary with a dynamic physical model—where the boundary/element interaction ratio is perfectly balanced — the full Compressor model configuration must be used, accounting for exact particle quantities and geometric radii. Since this program strictly utilises a fixed unit ratio, any provided adjustments serve exclusively to ensure abstract scale correspondence within the floating-point representation. Scale do not change the underlying frequencies of the root-driven (irrational provider) events that inherently fuel the system's variance.
 
 ## Common Notation & Glossary
 
@@ -28,9 +28,9 @@ To maintain consistency with the core [Compressor Wiki](https://github.com/VasOl
 * **$Mi$ / $Mb$:** individual mass of an element / average mass, used for kinetic scaling.
 * **$kT$:** thermodynamic temperature constraint (target kinetic energy scaling parameter).
 * **$\tau$:** the omitted in output eventual time span, mean free time.
-* **$Ta$ / $Ar$:** Exponential Moving Average (EMA) value / EMA step window ($1/Ar = 64$).
+* **$Ta$ / $Ar$:** Exponential Moving Average (EMA) $\tau$ value / EMA, step window ($1/Ar = 64$).
 * **$Dm$**: machine precision, unit float accuracy: value about 10E-16. 
-* **$Ds$:** near-LSB (least significant bit) noise drift estimation $Ds=Dm\cdot sqrt{Rn}(r+v)\to 2 Rb Dm\cdot sqrt{Rn},\quad r=v=Rb$.
+* **$Ds$:** near-LSB (least significant bit) noise drift estimation $Ds=Dm\cdot \sqrt{Rn}\cdot (r+v)\to 2\cdot Rb\cdot Dm\cdot \sqrt{Rn},\quad r=v=Rb$.
 * **`VV`:** spatial clearance indicator (free path check flag) used by the iterative mass-center normalizer.
 
 ## Acknowledgements:

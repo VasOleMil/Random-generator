@@ -1,6 +1,6 @@
 # High-Dimensional Asynchronous Hard-Sphere Generator (C# .NET 8)
 
-This repository implements a high-performance, hardware-aware asynchronous event-driven initialization [engine for hard-sphere packaging](https://github.com/VasOleMil/Compressor) and thermalization tasks in multi-dimensional spaces ($3D$ to $12D$). With virtual particle speed interchange linear complexity is reduced to fixed, further simplification - lowering beyond unit ratio of direction/speed interchange events shows non random behaviour.
+This repository implements a high-performance, hardware-aware asynchronous event-driven initialization [engine for hard-sphere packaging](https://github.com/VasOleMil/Compressor) and thermalization tasks in multi-dimensional spaces ($3D$ to $12D$). With virtual particle speed interchange complexity is lower but still linear on used elements, further simplification - lowering beyond unit ratio of direction/speed interchange events shows non random behaviour.
 
 ![7D Sphere surface](SRandom.Rep-07-40000.png)
 

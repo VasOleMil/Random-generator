@@ -47,16 +47,16 @@ namespace RandomHSM.src
             Rn = Dim; 
             Bn = Num;
  
-            Rb = Rbound;
-            Re = Relement;
-            dR = Rdif;
+            Rb = Rbound;   // calculate volumes: Vb, Mb - estimation
+            Re = Relement; Vgamma();   Vb = Vg * Rb; Mb = Vg * Re;
+            dR = Rdif; for (k = 1L; k < Rn; k++) { Vb *= Rb; Mb *= Re; }
 
             Rd = new Random(Seed);
 
             MainIni();
             EmtsIni();
             TimeIni();
-        }//Object construction
+        }// Object construction, R&D constructor
         //--------------------------------------------------------------------
         public 
         CRandom(long Dim, long Num, int Seed)
@@ -72,7 +72,7 @@ namespace RandomHSM.src
             MainIni();
             EmtsIni();
             TimeIni();
-        }//Object construction
+        }// Object construction
         //--------------------------------------------------------------------
         public 
         CRandom(long Dim, long Num)
@@ -88,7 +88,7 @@ namespace RandomHSM.src
             MainIni();
             EmtsIni();
             TimeIni();
-        }//Object construction
+        }// Object construction
         //--------------------------------------------------------------------
         internal void MainIni()
         {                        
@@ -111,7 +111,7 @@ namespace RandomHSM.src
             TimeCalcBE();           
             //register event
             TimeRegEvt();
-            //Probably interact elements, P = 1/2
+            //Probably interact elements, P = 1
             EmtsCollEE();
         }
         //--------------------------------------------------------------------

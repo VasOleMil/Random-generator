@@ -354,9 +354,9 @@ namespace RandomHSM.src
             for (k = 0L; k < Rn; k++) rv += Xe[k] * Ve[k];
             //rv= (Ka>X)? rv-Ds : (Ka<x)? rv+Ds:rv; 
             rv *= 2D * em.a; // kT regulation place
-   
+            //x = X = Rn*KT, stochastic  regulation
             for (k = 0L; k < Rn; k++) Ve[k] -= rv * Xe[k];
-        }// Bound em element interaction
+        }// Bound em element interaction, use regulation in service mode
         //--------------------------------------------------------------------
         private void EmtsCollBC()
         {
